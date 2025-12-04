@@ -1,0 +1,12 @@
+numpy
+pandas
+tqdm
+tokenizers
+attrdict
+fastprogress
+scikit-learn
+matplotlib
+
+transformers==4.6.1
+wandb
+dgl==1.1.2+cu116
