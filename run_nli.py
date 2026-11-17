@@ -15,6 +15,17 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 import torch
 
+def str_to_bool(value):
+    """Parse explicit boolean CLI values without treating nonempty strings as true."""
+    if value.lower() in ("true", "t", "yes", "y", "on", "1"):
+        return True
+    if value.lower() in ("false", "f", "no", "n", "off", "0"):
+        return False
+    raise argparse.ArgumentTypeError(
+        "expected a boolean value: true/false, yes/no, on/off, 1/0, y/n or t/f"
+    )
+
+
 def create_model(args):
 
     # Load
@@ -138,11 +149,11 @@ if __name__ == '__main__':
     cli_parser.add_argument("--max_seq_length", type=int, default=512)
     cli_parser.add_argument("--max_prem_length", type=int, default=270)
     cli_parser.add_argument("--max_hypo_length", type=int, default=190)
-    cli_parser.add_argument("--separate_sentence_pair", type=bool, default= False)
+    cli_parser.add_argument("--separate_sentence_pair", type=str_to_bool, default= False)
 
     cli_parser.add_argument("--label_relation", type=int, default=51)  # origin_relation: 50 + 1(virtual syntactic connection)
 
-    cli_parser.add_argument("--both_label_relation", type=bool, default= False) 
+    cli_parser.add_argument("--both_label_relation", type=str_to_bool, default= False)
     cli_parser.add_argument("--percent_special_weight", type=float, default= 1.0)
 
     cli_parser.add_argument("--num_multi_layers", type=int, default= 3)
@@ -167,22 +178,22 @@ if __name__ == '__main__':
     cli_parser.add_argument("--max_steps", type=int, default=-1)
     cli_parser.add_argument("--max_grad_norm", type=int, default=1.0)
 
-    cli_parser.add_argument("--verbose_logging", type=bool, default=False)
-    cli_parser.add_argument("--do_lower_case", type=bool, default=False)
-    cli_parser.add_argument("--no_cuda", type=bool, default=False)
+    cli_parser.add_argument("--verbose_logging", type=str_to_bool, default=False)
+    cli_parser.add_argument("--do_lower_case", type=str_to_bool, default=False)
+    cli_parser.add_argument("--no_cuda", type=str_to_bool, default=False)
 
     # ------------------------------------------------------------------------------------------------------------
 
     # Running Mode
-    cli_parser.add_argument("--from_init_weight", type=bool, default= False)
+    cli_parser.add_argument("--from_init_weight", type=str_to_bool, default= False)
     cli_parser.add_argument("--checkpoint", type=str, default="4")
 
-    cli_parser.add_argument("--do_train", type=bool, default = False)
-    cli_parser.add_argument("--do_eval", type=bool, default= False)
-    cli_parser.add_argument("--do_predict", type=bool, default= True)
-    cli_parser.add_argument("--draw_tsne", type=bool, default= False)
+    cli_parser.add_argument("--do_train", type=str_to_bool, default = False)
+    cli_parser.add_argument("--do_eval", type=str_to_bool, default= False)
+    cli_parser.add_argument("--do_predict", type=str_to_bool, default= True)
+    cli_parser.add_argument("--draw_tsne", type=str_to_bool, default= False)
     cli_parser.add_argument("--draw_tsne_name",  type=str, default="tsne_42.png")
-    cli_parser.add_argument("--draw_attn_map", type=bool, default= False)
+    cli_parser.add_argument("--draw_attn_map", type=str_to_bool, default= False)
     cli_args = cli_parser.parse_args()
 
     main(cli_args)
